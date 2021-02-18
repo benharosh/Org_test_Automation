@@ -1,15 +1,14 @@
 resources:
 
-  - name: S_HelmDeploy_FileSpec_0013_generic_resource
+  - name: S_HelmDeploy_FileSpec_0014_helmrepo_resource
     type: FileSpec
     configuration:
       sourceArtifactory: ben_rt
       pattern: >-
-        helmgeneric/
+        simplecharts/
       recursive: true
 
-  - name: S_HelmDeploy_GitRepo_0013_resource
-
+  - name: S_HelmDeploy_GitRepo_0014_resource
     type: GitRepo
     configuration:
       gitProvider: s_gitHub
@@ -18,45 +17,48 @@ resources:
         include: PIPE-4819
 
 pipelines:
-  - name: pipeline_S_HelmDeploy_0013
+  - name: pipeline_S_HelmDeploy_0014
     configuration:
       environmentVariables:
         readOnly:
-          release_name_generic: "simplehelm-generic-${run_id}"
+          release_name_from_helm_repo: "simplehelm-from-repo-${run_id}"
           k8s_namespace: "pipe-master-pool"
     steps:
-      - name: trigger_pipeline_S_HelmDeploy_0013
+      - name: trigger_pipeline_S_HelmDeploy_0014
         type: Bash
         configuration:
           integrations:
             - name: ben_rt
           inputResources:
-            - name: S_HelmDeploy_GitRepo_0013_resource
+            - name: S_HelmDeploy_GitRepo_0014_resource
               trigger: false
         execution:
           onExecute:
-            - request='{"key":"helmgeneric", "rclass":"local", "packageType":"generic", "description":"This repo is a test repo used by test autmation", "repoLayoutRef":"simple-default"}'
+            - request='{"key":"simplecharts", "rclass":"local", "packageType":"helm", "description":"This repo is a test repo used by test autmation", "repoLayoutRef":"simple-default"}'
             - echo $request > request.json
-            - jfrog rt repo-delete helmgeneric || true
+            - jfrog rt repo-delete simplecharts || true
             - jfrog rt repo-create request.json
-            - jfrog rt u ${res_S_HelmDeploy_GitRepo_0013_resource_resourcePath}/tests/core/helmdeploy/simplehelm-0.3.0.tgz "helmgeneric/" --explode
+            - jfrog rt u ${res_S_HelmDeploy_GitRepo_0014_resource_resourcePath}/tests/core/helmdeploy/simplehelm-0.3.0.tgz "simplecharts/"
+            - jfrog rt u ${res_S_HelmDeploy_GitRepo_0014_resource_resourcePath}/tests/core/helmdeploy/index.yaml "simplecharts/"
           onFailure:
-            - jfrog rt repo-delete helmgeneric
+            - jfrog rt repo-delete simplecharts
 
-      - name: deploy_helm_chart_generic
+      - name: deploy_helm_chart_from_helm_repo
         type: HelmDeploy
         configuration:
+          inputSteps:
+            - name: trigger_pipeline_S_HelmDeploy_0014
           integrations:
             - name: ben_rt
             - name: k8s
-          inputSteps:
-            - name: trigger_pipeline_S_HelmDeploy_0013
           inputResources:
-            - name: S_HelmDeploy_FileSpec_0013_generic_resource
-          chartPath: ./simplehelm/
+            - name: S_HelmDeploy_FileSpec_0014_helmrepo_resource
+          chartPath: ./
+          chartName: simplehelm
+          chartVersion: 0.3.0
           helmVersion: 3
-          releaseName: ${release_name_generic}
-          flags: "--force --wait --timeout 900s --set image.repository=trriplejay/simplehelm --set image.tag=latest"
+          releaseName: ${release_name_from_helm_repo}
+          flags: "--wait --timeout 900s -n ${k8s_namespace} --set image.repository=trriplejay/simplehelm --set image.tag=latest"
           valueFilePaths:
             - values.yaml
           # dryRun: true
@@ -73,16 +75,16 @@ pipelines:
             - chmod +x ./linux-amd64/helm
             - sudo mv ./linux-amd64/helm /usr/local/bin/helm3
           onFailure:
-            - jfrog rt repo-delete helmgeneric
+            - jfrog rt repo-delete simplecharts
 
-      - name: clean_helm_deploy_generic
+      - name: clean_helm_deploy_from_helm_repo
         type: Bash
         configuration:
           integrations:
             - name: ben_rt
             - name: k8s
           inputSteps:
-            - name: deploy_helm_chart_generic
+            - name: deploy_helm_chart_from_helm_repo
         execution:
           onStart:
             - ls -l $res_simpleHelmFileSpec_resourcePath
@@ -93,6 +95,6 @@ pipelines:
             - chmod +x ./linux-amd64/helm
             - sudo mv ./linux-amd64/helm /usr/local/bin/helm3
           onExecute:
-            - jfrog rt repo-delete helmgeneric || true
-            - helm3 delete ${release_name_generic} --namespace ${k8s_namespace}
+            - jfrog rt repo-delete simplecharts || true
+            - helm3 delete ${release_name_from_helm_repo} --namespace ${k8s_namespace}
 
