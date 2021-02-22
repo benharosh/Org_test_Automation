@@ -48,7 +48,7 @@ pipelines:
         configuration:
           integrations:
             - name: s_artifactory
-            - name: k8s
+            - name: s_kubernetes
           inputSteps:
             - name: trigger_pipeline_S_HelmDeploy_0013
           inputResources:
@@ -80,7 +80,7 @@ pipelines:
         configuration:
           integrations:
             - name: s_artifactory
-            - name: k8s
+            - name: s_kubernetes
           inputSteps:
             - name: deploy_helm_chart_generic
         execution:
