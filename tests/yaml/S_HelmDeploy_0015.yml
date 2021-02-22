@@ -37,11 +37,11 @@ pipelines:
           onExecute:
             - request='{"key":"helmgeneric", "rclass":"local", "packageType":"generic", "description":"This repo is a test repo used by test autmation", "repoLayoutRef":"simple-default"}'
             - echo $request > request.json
-            - jfrog rt repo-delete helmgeneric || true
+            - jfrog rt repo-delete helmgeneric --quiet || true
             - jfrog rt repo-create request.json
             - jfrog rt u ${res_S_HelmDeploy_GitRepo_0015_resource_resourcePath}/tests/core/helmdeploy/simplehelm-0.3.0.tgz "helmgeneric/" --explode
           onFailure:
-            - jfrog rt repo-delete helmgeneric
+            - jfrog rt repo-delete helmgeneric --quiet
 
       - name: deploy_helm_chart_generic
         type: HelmDeploy
@@ -73,7 +73,7 @@ pipelines:
             - chmod +x ./linux-amd64/helm
             - sudo mv ./linux-amd64/helm /usr/local/bin/helm3
           onFailure:
-            - jfrog rt repo-delete helmgeneric
+            - jfrog rt repo-delete helmgeneric --quiet
 
       - name: clean_helm_deploy_generic
         type: Bash
@@ -93,6 +93,6 @@ pipelines:
             - chmod +x ./linux-amd64/helm
             - sudo mv ./linux-amd64/helm /usr/local/bin/helm3
           onExecute:
-            - jfrog rt repo-delete helmgeneric || true
+            - jfrog rt repo-delete helmgeneric --quiet || true
             - helm3 delete ${release_name_generic} --namespace ${k8s_namespace}
 
