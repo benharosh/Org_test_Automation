@@ -9,7 +9,7 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: s_gitHub
-      path: jfbetapipeorg/Org_test_Automation
+      path: benharosh/Org_test_Automation
       branches:
         include: master
 
@@ -52,7 +52,7 @@ pipelines:
         configuration:
           integrations:
             - name: s_artifactory
-            - name: s_kubernetes
+            - name: k8s
           inputSteps:
             - name: S_HelmDeploy_0026_build_charts
           inputResources:

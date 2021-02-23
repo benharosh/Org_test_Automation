@@ -50,7 +50,7 @@ pipelines:
             - name: trigger_pipeline_S_HelmDeploy_0016
           integrations:
             - name: s_artifactory
-            - name: s_kubernetes
+            - name: k8s
           inputResources:
             - name: S_HelmDeploy_FileSpec_0016_helmrepo_resource
           chartPath: ./
@@ -82,7 +82,7 @@ pipelines:
         configuration:
           integrations:
             - name: s_artifactory
-            - name: s_kubernetes
+            - name: k8s
           inputSteps:
             - name: deploy_helm_chart_from_helm_repo
         execution:

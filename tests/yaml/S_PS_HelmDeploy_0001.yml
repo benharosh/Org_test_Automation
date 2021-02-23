@@ -11,7 +11,7 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: s_gitHub
-      path: jfbetapipeorg/Org_test_Automation
+      path: benharosh/Org_test_Automation
       branches:
         include: master
 
@@ -69,6 +69,6 @@ pipelines:
             - Set-Alias -Name helm3 -Value "C:\ProgramData\chocolatey\lib\kubernetes-helm.3.4.0\tools\windows-amd64\helm.exe" -Scope Global
             - try { get-command "helm3" } catch {}
           onComplete:
-            - jfrog rt repo-delete helmgeneric
+            - jfrog rt repo-delete helmgeneric --quiet
             - helm3 delete $simplehelm-generic-$run_id --namespace $k8s_namespace
 
