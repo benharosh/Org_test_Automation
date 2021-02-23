@@ -61,7 +61,6 @@ pipelines:
           flags: "--wait --timeout 900s -n ${k8s_namespace} --set image.repository=trriplejay/simplehelm --set image.tag=latest"
           valueFilePaths:
             - values.yaml
-          # dryRun: true
           lint: true
           lintFlags: "--strict"
           test: true
@@ -74,27 +73,8 @@ pipelines:
             - tar xzvf helm.tar.gz
             - chmod +x ./linux-amd64/helm
             - sudo mv ./linux-amd64/helm /usr/local/bin/helm3
-          onFailure:
-            - jfrog rt repo-delete simplecharts --quiet
-
-      - name: clean_helm_deploy_from_helm_repo
-        type: Bash
-        configuration:
-          integrations:
-            - name: s_artifactory
-            - name: s_kubernetes
-          inputSteps:
-            - name: deploy_helm_chart_from_helm_repo
-        execution:
-          onStart:
-            - ls -l $res_simpleHelmFileSpec_resourcePath
-            - export HELM_VERSION=3.4.0
-            - echo "================= Adding helm cli $HELM_VERSION ======================================"
-            - curl -sSL -o helm.tar.gz https://get.helm.sh/helm-v"$HELM_VERSION"-linux-amd64.tar.gz
-            - tar xzvf helm.tar.gz
-            - chmod +x ./linux-amd64/helm
-            - sudo mv ./linux-amd64/helm /usr/local/bin/helm3
-          onExecute:
+          onComplete:
             - jfrog rt repo-delete simplecharts --quiet || true
             - helm3 delete ${release_name_from_helm_repo} --namespace ${k8s_namespace}
+
 

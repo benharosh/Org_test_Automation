@@ -64,7 +64,6 @@ pipelines:
           flags: "--force --wait --timeout 900s --set image.repository=trriplejay/simplehelm --set image.tag=latest"
           valueFilePaths:
             - values.yaml
-          # dryRun: true
           lint: true
           lintFlags: "--strict"
           test: true

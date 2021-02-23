@@ -63,7 +63,6 @@ pipelines:
           flags: "--force --wait --timeout 900s --set image.repository=trriplejay/simplehelm --set image.tag=latest"
           valueFilePaths:
             - values.yaml
-          # dryRun: true
           lint: true
           lintFlags: "--strict"
           test: true
@@ -76,5 +75,5 @@ pipelines:
             - chmod +x ./linux-amd64/helm
             - sudo mv ./linux-amd64/helm /usr/local/bin/helm3
           onComplete:
-            - jfrog rt repo-delete helmgemeric --quiet || true
+            - jfrog rt repo-delete helmgeneric --quiet || true
             - helm3 delete simplehelm-generic-$run_id --namespace $K8S_NAMESPACE

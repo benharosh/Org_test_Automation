@@ -12,7 +12,7 @@ pipelines:
       - name: S_HelmDeploy_0017
         type: HelmDeploy
         configuration:
-          chartPath: ./
+          chartPath: ./myChartPath/
           helmVersion: 3
           releaseName: release
           integrations:
