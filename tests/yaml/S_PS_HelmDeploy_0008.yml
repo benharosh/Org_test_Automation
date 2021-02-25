@@ -10,7 +10,7 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: s_gitHub
-      path: jfbetapipeorg/Org_test_Automation
+      path: benharosh/Org_test_Automation
       branches:
         include: master
 
@@ -53,7 +53,7 @@ pipelines:
           inputSteps:
             - name: S_PS_HelmDeploy_0008_create_build
           integrations:
-            - name: s_kubernetes
+            - name: k8s
           inputResources:
             - name: S_PS_HelmDeploy_BuildInfo_0008
           helmVersion: 3
