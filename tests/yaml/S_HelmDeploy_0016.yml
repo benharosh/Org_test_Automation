@@ -53,7 +53,7 @@ pipelines:
             - name: k8s
           inputResources:
             - name: S_HelmDeploy_FileSpec_0016_helmrepo_resource
-          chartPath: ./
+          chartPath: ./pathDoesntExist/
           chartName: simplehelm
           chartVersion: 0.3.0
           helmVersion: 3
