@@ -10,9 +10,9 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: s_gitHub
-      path: jfbetapipeorg/Org_test_Automation
+      path: benharosh/Org_test_Automation
       branches:
-        include: master
+        include: feature-PIPE-4901-custom
 
   - name: S_HelmDeploy_ReleaseBundle_0034_ReleaseBundle
     type: ReleaseBundle
@@ -78,6 +78,8 @@ pipelines:
           helmVersion: 3
           releaseName: ${RELEASE_NAME}
           chartPath: simplecharts
+          chartName: simplehelm
+          chartVersion: 0.3.0
           flags: "--force --wait --timeout 900s --set image.repository=trriplejay/simplehelm --set image.tag=latest"
           valueFilePaths:
             - values.yaml

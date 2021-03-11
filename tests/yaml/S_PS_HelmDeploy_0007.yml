@@ -10,13 +10,21 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: s_gitHub
-      path: jfbetapipeorg/Org_test_Automation
+      path: benharosh/Org_test_Automation
       branches:
-        include: master
+        include: feature-PIPE-4901-custom
 
 pipelines:
   - name: S_PS_HelmDeploy_BuildInfo_0007_generic
     configuration:
+      runtime:
+        type: image
+        image:
+          custom:
+            name: releases-docker.jfrog.io/jfrog/pipelines-w19cpp
+            tag: 9.0.1
+            registry: docker_registry
+            autoPull: true
       environmentVariables:
         readOnly:
           release_name_generic: "simplehelm-generic-${run_id}"

@@ -10,9 +10,9 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: s_gitHub
-      path: jfbetapipeorg/Org_test_Automation
+      path: benharosh/Org_test_Automation
       branches:
-        include: master
+        include: feature-PIPE-4901-custom
 
   - name: S_HelmDeploy_0033_ReleaseBundle_resource
     type: ReleaseBundle
@@ -94,8 +94,8 @@ pipelines:
             - if [ $status -gt 299 ]; then return 1; fi
             - if [ $status -eq 204 ]; then echo "Deleted release bundle $releaseBundleName/$releaseBundleVersion successfully"; fi
             - echo "Deleting artifactory repository..."
-            - jfrog rt repo-delete helmgeneric_auto --quiet || true
+            - jfrog rt repo-delete helmgeneric --quiet || true
             - echo "Deleting helm resources..."
-            - helm3 delete $simplehelm-generic-$run_id --namespace $K8S_NAMESPACE
+            - helm3 delete simplehelm-generic-$run_id --namespace $K8S_NAMESPACE
 
 
