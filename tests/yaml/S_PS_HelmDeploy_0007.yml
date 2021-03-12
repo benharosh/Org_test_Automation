@@ -21,8 +21,6 @@ pipelines:
         readOnly:
           release_name_generic: "simplehelm-generic-${run_id}"
           k8s_namespace: "pipe-master-pool"
-          JFROG_CLI_BUILD_NAME: helmbuild_genric
-          JFROG_CLI_BUILD_NUMBER: ${run_id}
       nodePool: win_2019
     steps:
       - name: S_PS_HelmDeploy_0007_create_build
@@ -37,13 +35,13 @@ pipelines:
         execution:
           onExecute:
             - jfrog --version
-            - $json = @{key="helmgeneric";rclass="local";packageType="generic";description="This repo is a test repo used by test autmation";repoLayoutRef="simple-default"} | ConvertTo-Json -Compress  | Out-File c:\myrequest.json -Encoding Ascii -Force
+            - $json = @{key="helmgeneric";rclass="local";packageType="generic";description="This repo is a test repo used by test automation";repoLayoutRef="simple-default"} | ConvertTo-Json -Compress  | Out-File c:\myrequest.json -Encoding Ascii -Force
             - jfrog rt repo-create c:\myrequest.json
             - cd $res_S_PS_HelmDeploy_GitRepo_0007_resourcePath/tests/core/helmdeploy
-            - jfrog rt u simplehelm/ "helmgeneric/" --flat=false --build-name=$JFROG_CLI_BUILD_NAME --build-number=$JFROG_CLI_BUILD_NUMBER
-            - jfrog rt bce $JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER
-            - jfrog rt bp $JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER
-            - write_output S_PS_HelmDeploy_BuildInfo_0007 buildName=$JFROG_CLI_BUILD_NAME buildNumber=$JFROG_CLI_BUILD_NUMBER
+            - jfrog rt u simplehelm/ "helmgeneric/" --flat=false --build-name=$JFROG_CLI_BUILD_NAME --build-number=${JFROG_CLI_BUILD_NUMBER}
+            - jfrog rt bce ${JFROG_CLI_BUILD_NAME} ${JFROG_CLI_BUILD_NUMBER}
+            - jfrog rt bp ${JFROG_CLI_BUILD_NAME} ${JFROG_CLI_BUILD_NUMBER}
+            - write_output S_PS_HelmDeploy_BuildInfo_0007 buildName=${JFROG_CLI_BUILD_NAME} buildNumber=${JFROG_CLI_BUILD_NUMBER}
           onFailure:
             - jfrog rt repo-delete helmgeneric --quiet
 
@@ -53,6 +51,7 @@ pipelines:
           inputSteps:
             - name: S_PS_HelmDeploy_0007_create_build
           integrations:
+            - name: s_artifactory
             - name: s_kubernetes
           inputResources:
             - name: S_PS_HelmDeploy_BuildInfo_0007
@@ -66,17 +65,6 @@ pipelines:
           lintFlags: "--strict"
           test: true
         execution:
-          onStart:
-            - try { get-command "helm" } catch {}
-            - try { get-command "helm3" } catch {}
-            - choco uninstall -y kubernetes-helm -force -a
-            - $global:HELM3_VERSION = "3.4.0"
-            - choco install -y kubernetes-helm --version=$global:HELM3_VERSION -m -force
-            - $global:HELM2_VERSION = "2.16.1"
-            - choco install -y kubernetes-helm --version=$global:HELM2_VERSION -m -force
-            - Set-Alias -Name helm3 -Value "C:\ProgramData\chocolatey\lib\kubernetes-helm.3.4.0\tools\windows-amd64\helm.exe" -Scope Global
-            - try { get-command "helm3" } catch {}
           onComplete:
             - jfrog rt repo-delete helmgeneric --quiet
-            - helm3 delete $simplehelm-generic-$run_id --namespace $k8s_namespace
-
+            - helm3 delete simplehelm-generic-$run_id --namespace $k8s_namespace

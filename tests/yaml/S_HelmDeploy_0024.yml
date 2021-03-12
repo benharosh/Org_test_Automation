@@ -35,7 +35,7 @@ pipelines:
             - name: S_HelmDeploy_BuildInfo_0024_resource
         execution:
           onStart:
-            - request='{"key":"helmgeneric", "rclass":"local", "packageType":"generic", "description":"This repo is a test repo used by test autmation", "repoLayoutRef":"simple-default"}'
+            - request='{"key":"helmgeneric", "rclass":"local", "packageType":"generic", "description":"This repo is a test repo used by test automation", "repoLayoutRef":"simple-default"}'
             - echo $request > request.json
             - jfrog rt repo-delete helmgeneric --quiet || true
             - jfrog rt repo-create request.json
