@@ -66,4 +66,3 @@ pipelines:
           onComplete:
             - jfrog rt repo-delete helmgeneric || true
             - helm3 delete ${release_name_generic} --namespace ${k8s_namespace}
-
