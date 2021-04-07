@@ -27,6 +27,14 @@ resources:
 pipelines:
   - name: S_PS_HelmDeploy_0013
     configuration:
+      runtime:
+        type: image
+        image:
+          custom:
+            name: releases-docker.jfrog.io/jfrog/pipelines-w19cpp
+            tag: 9.0.1
+            registry: docker_registry
+            autoPull: true
       environmentVariables:
         readOnly:
           release_name_generic: "simplehelm-generic-${run_id}"
