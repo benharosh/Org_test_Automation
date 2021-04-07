@@ -14,7 +14,7 @@ resources:
       gitProvider: s_gitHub
       path: {{ .Values.GitHub.Org_test_Automation.path }}
       branches:
-        include: master
+        include: {{gitBranch}}
 
 pipelines:
   - name: pipeline_S_HelmDeploy_0032

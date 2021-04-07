@@ -15,7 +15,7 @@ resources:
       gitProvider: s_gitHub
       path: {{ .Values.GitHub.Org_test_Automation.path }}
       branches:
-        include: master
+        include: {{gitBranch}}
 
   - name: S_HelmDeploy_0035_ReleaseBundle_resource
     type: ReleaseBundle
@@ -34,7 +34,7 @@ pipelines:
           JFROG_CLI_BUILD_NAME: helmbuild_generic
           JFROG_CLI_BUILD_NUMBER: ${run_id}
     steps:
-      - name: S_HelmDeploy_0035_create_build
+      - name: S_HelmDeploy_0035_build_charts
         type: Bash
         configuration:
           integrations:
