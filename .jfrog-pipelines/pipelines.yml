@@ -1,0 +1,15 @@
+pipelines:
+  - name: Test_Docker_Info
+    configuration:
+      runtime:
+        type: image
+        image:
+          custom:
+            name: releases-docker.jfrog.io/jfrog/pipelines-u20node
+            tag: '16'
+    steps:
+      - name: Test_Docker_Info_001
+        type: Bash
+        execution:
+          onExecute:
+            - docker info --format '{{ '{{' }} json .'{{ '}}' }}
