@@ -13,4 +13,4 @@ pipelines:
         execution:
           onExecute:
             - myOutput=`docker info --format "{{ "{{" }} json .{{ "}}" }}" | jq '.RegistryConfig.IndexConfigs."docker.io".Secure'`
-            - if [ "$myOutput" != "true" ]; then return 1; fi
+            - if [ "$myOutput" != "false" ]; then return 1; fi
