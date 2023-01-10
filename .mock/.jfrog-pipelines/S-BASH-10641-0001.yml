@@ -1,7 +1,7 @@
 pipelines:
   - name: S_Bash_10641_0001
     configuration:
-      nodePool: u20k8sdynamic_10641
+      nodePool: k8s
     steps:
       - name: S_Bash_10641_0001_1
         type: Bash
