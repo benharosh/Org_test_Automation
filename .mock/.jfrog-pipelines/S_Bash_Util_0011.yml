@@ -1,0 +1,31 @@
+template: true
+valuesFilePath: ../values/gitRepoValues.yml
+
+resources:
+  - name: S_Bash_Util_0011
+    type: GitRepo
+    configuration:
+      gitProvider: s_gitHub
+      path: {{ .Values.GitHub.Org_test_Automation.path }}
+
+pipelines:
+  - name: pipeline_S_Bash_Util_0011
+    steps:
+      - name: S_Bash_Util_0011
+        type: Bash
+        configuration:
+          inputResources:
+            - name: S_Bash_Util_0011
+
+        execution:
+          onExecute:
+            - pushd $res_S_Bash_Util_0011_resourcePath
+            - touch test.xml
+            - echo "hello frog" > test.xml
+            - python3 -m py_compile tests/core/sampleExecutionFile/calc.py
+            - pip install --upgrade pip
+            - hash -d pip
+            - pip install pytest
+            - py.test --verbose --junit-xml test-reports/results.xml tests/core/sampleExecutionFile/test_calc.py
+            - save_tests $res_S_Bash_Util_0011_resourcePath/test.xml
+            - popd
