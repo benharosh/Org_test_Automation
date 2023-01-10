@@ -5,12 +5,6 @@ pipelines:
         type: Bash
         configuration:
           nodePool: u20k8sdynamic_10641
-          runtime:
-            type: image
-            image:
-              custom:
-                name: releases-docker.jfrog.io/jfrog/pipelines-u20node
-                tag: '16'
         execution:
           onExecute:
             - myOutput=`docker info --format "{{ "{{" }} json .{{ "}}" }}" | jq '.RegistryConfig.IndexConfigs."myinsecureregistry.com".Secure'`
