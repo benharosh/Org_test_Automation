@@ -1,7 +1,7 @@
 pipelines:
   - name: S_Bash_10641_0001
     configuration:
-      nodePool: k8s
+      nodePool: nodepool1
     steps:
       - name: S_Bash_10641_0001_1
         type: Bash
