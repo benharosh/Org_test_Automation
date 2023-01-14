@@ -4,9 +4,9 @@ pipelines:
       - name: step1
         type: Bash
         execution:
-          onStart:
-            - end_step success
-            - echo "onStart command"'
+          onExecute:
+            - end_step failure
+            - echo "onExecute command"'
   - name: mytest_failure
     steps:
       - name: step1
