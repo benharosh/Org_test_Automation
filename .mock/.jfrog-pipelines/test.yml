@@ -13,5 +13,5 @@ pipelines:
         type: Bash
         execution:
           onExecute:
-            - end_step success
+            - end_step failure
             - echo "onStart command"'
