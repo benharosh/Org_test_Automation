@@ -4,14 +4,14 @@ pipelines:
       - name: step1
         type: Bash
         execution:
-          onExecute:
-            - end_step failure
-            - echo "onExecute command"'
+          onStart:
+            - end_step success
+            - echo "onStart command"'
   - name: mytest_failure
     steps:
       - name: step1
         type: Bash
         execution:
-          onStart:
-            - end_step failure
+          onExecute:
+            - end_step success
             - echo "onStart command"'
