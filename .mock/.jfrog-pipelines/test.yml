@@ -6,7 +6,7 @@ pipelines:
         execution:
           onStart:
             - end_step success
-            - echo "onStart command"'
+            - echo "onStart command"
   - name: mytest_failure
     steps:
       - name: step1
@@ -14,7 +14,7 @@ pipelines:
         execution:
           onExecute:
             - end_step failure
-            - echo "onStart command"'
+            - echo "onStart command"
 
   - name: mytest_skipped
     steps:
@@ -23,7 +23,7 @@ pipelines:
         execution:
           onExecute:
             - end_step skipped
-            - echo "onStart command"'
+            - echo "onStart command"
 
   - name: mytest_onsuccess_failed
     steps:
@@ -31,6 +31,6 @@ pipelines:
         type: Bash
         execution:
           onExecute:
-            - echo "onExecute command"'
+            - echo "onExecute command"
           onSuccess:
             - end_step skipped
