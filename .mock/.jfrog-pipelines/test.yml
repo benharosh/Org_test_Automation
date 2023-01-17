@@ -24,3 +24,13 @@ pipelines:
           onExecute:
             - end_step skipped
             - echo "onStart command"'
+
+  - name: mytest_onsuccess_failed
+    steps:
+      - name: step1
+        type: Bash
+        execution:
+          onExecute:
+            - echo "onExecute command"'
+          onSuccess:
+            - end_step skipped
