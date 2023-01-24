@@ -1,0 +1,20 @@
+pipelines:
+  - name: pipeline_S_Bash_Util_0005_1
+    steps:
+      - name: S_Bash_Util_0005_1
+        type: Bash
+        execution:
+          onExecute:
+            - touch file.txt
+            - echo "Hello frog" >> file.txt
+            - add_run_files file.txt jfrog_pipeline
+
+      - name: S_Bash_Util_0005_2
+        type: Bash
+        configuration:
+          inputSteps:
+            - name:  S_Bash_Util_0005_1
+        execution:
+          onExecute:
+            - restore_run_files jfrog_pipeline $step_tmp_dir
+            - ls -la jfrog_pipeline
