@@ -67,7 +67,7 @@ pipelines:
 
   - name: Powershell_Upload_Run_State_Archice
     configuration:
-      nodePool: win_2019
+      nodePool: windows_2019
     steps:
       - name: S_PS_UTIL_6380_006_1
         type: PowerShell
