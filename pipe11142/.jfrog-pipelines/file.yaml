@@ -1,0 +1,27 @@
+pipelines:
+  - name: doNotUploadRunState
+    steps:
+      - name: S_Bash_11142_1
+        type: Bash
+        configuration:
+        execution:
+          onExecute:
+            - mkdir -p files
+            - echo "foo" > ./files/foo.txt
+            - add_run_files ./files state
+
+  - name: uploadRunState
+    steps:
+      - name: S_Bash_11142_1
+        type: Bash
+        configuration:
+          environmentVariables:
+            JFROG_PIPELINES_RUN_STATE_DEBUG: 'true'
+        execution:
+          onExecute:
+            - mkdir -p files
+            - echo "foo" > ./files/foo.txt
+            - add_run_files ./files state
+
+
+
