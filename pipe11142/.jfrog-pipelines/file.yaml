@@ -3,7 +3,6 @@ pipelines:
     steps:
       - name: S_Bash_11142_1
         type: Bash
-        configuration:
         execution:
           onExecute:
             - mkdir -p files
